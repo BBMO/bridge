@@ -57,7 +57,7 @@
             </div>
             <div class="form-group">
                 <label>Dimension</label>
-                <input type="number" name="dimension" class="form-control" placeholder="Dimension ( impar )">
+                <input type="number" min="3" step="2" name="dimension" class="form-control" placeholder="Dimension ( impar )">
             </div>
             <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
