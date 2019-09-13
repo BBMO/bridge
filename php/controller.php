@@ -76,6 +76,40 @@ function validatePosition () {
 function changeTurn () {
 
     //Cargando data temporal
+    $matriz = $_SESSION["matriz"];
+    for ($i = 0; $i < $_SESSION["dimension"]; $i++) {
+        for ($j = 0; $j < $_SESSION["dimension"]; $j++) {
+            $matriz[$i][$j]['checked'] = false;
+        }
+    }
+
+    $validations = [
+        "left" => false,
+        "right" => false,
+        'top' => false,
+        'bottom' => false
+    ];
+
+
+    if ($_SESSION["turno"] === 1) {
+        validateWay((int)$_GET["row"], (int)$_GET["col"], $matriz, $validations);
+        //print_r($validations);
+        if ($validations["left"] && $validations["right"]) {
+            $_SESSION["player_win"]["win"] = true;
+            $_SESSION["player_win"]["name"] = $_SESSION['player'][0];
+        };
+        $_SESSION["turno"] = 2;
+    } else {
+        validateWay((int)$_GET["row"], (int)$_GET["col"], $matriz, $validations);
+        //print_r($validations);
+        if ($validations["top"] && $validations["bottom"]) {
+            $_SESSION["player_win"]["win"] = true;
+            $_SESSION["player_win"]["name"] = $_SESSION['player'][1];
+        };
+        $_SESSION["turno"] = 1;
+    }
+    gameOver();
+
     $fullBoxes = true;
     $matriz = $_SESSION["matriz"];
     for ($i = 0; $i < $_SESSION["dimension"]; $i++) {
@@ -87,34 +121,6 @@ function changeTurn () {
         }
     }
 
-    if ( !$fullBoxes ) {
-        $validations = [
-            "left" => false,
-            "right" => false,
-            'top' => false,
-            'bottom' => false
-        ];
-
-
-        if ($_SESSION["turno"] === 1) {
-            validateWay((int)$_GET["row"], (int)$_GET["col"], $matriz, $validations);
-            //print_r($validations);
-            if ($validations["left"] && $validations["right"]) {
-                $_SESSION["player_win"]["win"] = true;
-                $_SESSION["player_win"]["name"] = $_SESSION['player'][0];
-            };
-            $_SESSION["turno"] = 2;
-        } else {
-            validateWay((int)$_GET["row"], (int)$_GET["col"], $matriz, $validations);
-            //print_r($validations);
-            if ($validations["top"] && $validations["bottom"]) {
-                $_SESSION["player_win"]["win"] = true;
-                $_SESSION["player_win"]["name"] = $_SESSION['player'][1];
-            };
-            $_SESSION["turno"] = 1;
-        }
-    }
-    gameOver();
     return $fullBoxes;
 }
 
